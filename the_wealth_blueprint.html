@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> THE WEALTH BLUEPRINT </title>
+    <title> Finance Manager</title>
+    
+    <!-- Importing Google Fonts for a more elegant look -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Lobster&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #1e3c72, #2a5298); /* Gradient background from blue to black */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: white; /* Change text color to white for better contrast */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .form-container:hover {
+            transform: scale(1.05); /* Slight hover effect for the form */
+        }
+
+        h1 {
+            color: #333;
+            font-family: 'Lobster', cursive;
+            font-size: 36px;
+        }
+
+        .input-field, .expense-category, .btn, select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s ease-in-out;
+        }
+
+        .input-field:focus, .expense-category:focus, select:focus {
+            border-color: #2a5298; /* Highlight on focus */
+            outline: none;
+        }
+
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background-color: #45a049; /* Hover effect for the button */
+        }
+
+        /* Navigation Bar at the Top */
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 18px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar a:hover {
+            color: #ff7e5f; /* Hover effect for navigation links */
+        }
+
+        /* Summary and Tips Section */
+        .summary {
+            font-size: 18px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .tip {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 400px;
+        }
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .navigation a {
+            color: #4caf50;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navigation a:hover {
+            color: #ff7e5f;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar with Home, Back, Next, and Profile buttons -->
+    <div class="navbar">
+        <a href="javascript:void(0);" onclick="showLoginPage();">Home</a>
+        <a href="javascript:void(0);" onclick="goBack();">Back</a>
+        <a href="javascript:void(0);" onclick="goNext();">Next</a>
+        <a href="javascript:void(0);" onclick="showDashboard();">Dashboard</a>
+    </div>
+
+    <div class="container">
+        <!-- Login Page -->
+        <div id="login-page" class="form-container">
+            <h1>Login to Your Account</h1>
+            <form id="login-form" onsubmit="event.preventDefault(); showProfileForm();">
+                <input type="email" name="email" class="input-field" placeholder="Email Address" required><br>
+                <input type="password" name="password" class="input-field" placeholder="Password" required><br>
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+            <div class="navigation">
+                <p>Don't have an account? <a href="javascript:void(0);" onclick="showSignUpForm();">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Sign-Up Page -->
+        <div id="signup-page" class="form-container" style="display:none;">
+            <h1>Create Your Account</h1>
+            <form id="signup-form" onsubmit="event.preventDefault(); showProfileForm();">
+                <input type="email" name="email" class="input-field" placeholder="Email Address" required><br>
+                <input type="password" name="password" class="input-field" placeholder="Password" required><br>
+                <input type="password" name="confirm-password" class="input-field" placeholder="Confirm Password" required><br>
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+            <div class="navigation">
+                <p>Already have an account? <a href="javascript:void(0);" onclick="showLoginPage();">Login here</a></p>
+            </div>
+        </div>
+
+        <!-- Profile Completion Page -->
+        <div id="profile-page" class="form-container" style="display:none;">
+            <h1>Complete Your Profile</h1>
+            <form id="profile-form" onsubmit="event.preventDefault(); showDashboard();">
+                <input type="text" name="name" class="input-field" placeholder="Your Name" required><br>
+                <input type="number" name="age" class="input-field" placeholder="Age" required><br>
+                <input type="text" name="occupation" class="input-field" placeholder="Current Occupation" required><br>
+                <input type="text" name="previous-occupation" class="input-field" placeholder="Previous Occupation"><br>
+                <input type="number" name="income" class="input-field" placeholder="Income from Current Job" required><br>
+                <input type="number" name="external-income" class="input-field" placeholder="External Income"><br>
+                <select name="gender" class="input-field" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select><br>
+                <input type="text" name="state" class="input-field" placeholder="State" required><br>
+                <select name="category" class="input-field" required>
+                    <option value="">Reserved Category</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="OBC">OBC</option>
+                    <option value="None">None</option>
+                </select><br>
+                <button type="submit" class="btn">Submit Profile</button>
+            </form>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="form-container" style="display:none;">
+            <h1>Welcome to Your Dashboard</h1>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showExpensesForm();">Know Your Expenses</a></p>
+                <p><a href="javascript:void(0);" onclick="showSavingGoalsForm();">Set Saving Goals</a></p>
+                <p><a href="javascript:void(0);" onclick="showBudgetManagementForm();">Budget Management</a></p>
+            </div>
+        </div>
+
+        <!-- Expenses Form -->
+        <div id="expenses-page" class="form-container" style="display:none;">
+            <h1>Know Your Expenses</h1>
+            <form id="expenses-form" onsubmit="event.preventDefault(); showExpenseSummary();">
+                <h2>Enter Monthly Expenses</h2>
+                <input type="number" name="education" class="expense-category" placeholder="Education" required><br>
+                <input type="number" name="household" class="expense-category" placeholder="Household" required><br>
+                <input type="number" name="transport" class="expense-category" placeholder="Transport" required><br>
+                <input type="number" name="health" class="expense-category" placeholder="Health" required><br>
+                <input type="number" name="subscriptions" class="expense-category" placeholder="Online Subscriptions" required><br>
+                <button type="submit" class="btn">Submit Expenses</button>
+            </form>
+        </div>
+
+        <!-- Expense Summary -->
+        <div id="expense-summary" class="form-container" style="display:none;">
+            <h1>Expense Summary</h1>
+            <p>Total Expenses: <strong id="total-expenses">$0</strong></p>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- Saving Goals Form -->
+        <div id="saving-goals-page" class="form-container" style="display:none;">
+            <h1>Set Your Saving Goals</h1>
+            <form id="saving-goals-form" onsubmit="event.preventDefault(); showFinancialGoalPage();">
+                <h2>Choose Your Goals</h2>
+                <select name="goal" class="input-field" required>
+                    <option value="">Select Goal</option>
+                    <option value="Emergency Fund">Emergency Fund</option>
+                    <option value="Car Purchase">Car Purchase</option>
+                    <option value="Home Purchase">Home Purchase</option>
+                    <option value="Vacation">Vacation</option>
+                </select><br>
+                <button type="submit" class="btn">Submit Goals</button>
+            </form>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- Financial Goal Form -->
+        <div id="financial-goal-page" class="form-container" style="display:none;">
+            <h1>Define Your Financial Goal</h1>
+            <form id="financial-goal-form" onsubmit="event.preventDefault(); showBudgetManagementPage();">
+                <input type="text" name="financial-goal" class="input-field" placeholder="Goal Description" required><br>
+                <button type="submit" class="btn">Submit Goal</button>
+            </form>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- Budget Management Page -->
+        <div id="budget-management-page" class="form-container" style="display:none;">
+            <h1>Budget Management</h1>
+            <form id="budget-form" onsubmit="event.preventDefault(); showSummaryPage();">
+                <h2>Track Your Daily Income & Expenses</h2>
+                <input type="date" name="date" class="input-field" required><br>
+                <input type="number" name="daily-income" class="input-field" placeholder="Income" required><br>
+                <input type="number" name="daily-expenses" class="input-field" placeholder="Expenses" required><br>
+                <button type="submit" class="btn">Submit Budget</button>
+            </form>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- Summary Page -->
+        <div id="summary-page" class="form-container" style="display:none;">
+            <h1>Summary of Your Financials</h1>
+            <canvas id="expenseChart"></canvas>
+            <div class="summary">
+                <p>Total Income: <strong id="total-income">$5000</strong></p>
+                <p>Total Expenses: <strong id="total-expenses-summary">$0</strong></p>
+                <p>Remaining Balance: <strong id="remaining-balance">$0</strong></p>
+            </div>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showHelpPage();">Financial Education Tips</a></p>
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- Help Page -->
+        <div id="help-page" class="form-container" style="display:none;">
+            <h1>Financial Education Tips</h1>
+            <p>Stay consistent with your goals, and track your expenses regularly to save for emergencies and large purchases.</p>
+            <div class="navigation">
+                <p><a href="javascript:void(0);" onclick="showSummaryPage();">Go Back to Summary</a></p>
+                <p><a href="javascript:void(0);" onclick="showDashboard();">Go to Dashboard</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let totalExpenses = 0; // Variable to store total expenses
+
+        // Show the Login page
+        function showLoginPage() {
+            document.getElementById('login-page').style.display = 'block';
+            document.getElementById('signup-page').style.display = 'none';
+            document.getElementById('profile-page').style.display = 'none';
+            document.getElementById('dashboard-page').style.display = 'none';
+            document.getElementById('expenses-page').style.display = 'none';
+            document.getElementById('expense-summary').style.display = 'none';
+            document.getElementById('saving-goals-page').style.display = 'none';
+            document.getElementById('financial-goal-page').style.display = 'none';
+            document.getElementById('budget-management-page').style.display = 'none';
+            document.getElementById('summary-page').style.display = 'none';
+            document.getElementById('help-page').style.display = 'none';
+        }
+
+        // Show the Sign-Up page
+        function showSignUpForm() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('signup-page').style.display = 'block';
+        }
+
+        // Show Profile Completion page
+        function showProfileForm() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('signup-page').style.display = 'none';
+            document.getElementById('profile-page').style.display = 'block';
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('profile-page').style.display = 'none';
+            document.getElementById('dashboard-page').style.display = 'block';
+        }
+
+        // Show Expense Tracking Form
+        function showExpensesForm() {
+            document.getElementById('dashboard-page').style.display = 'none';
+            document.getElementById('expenses-page').style.display = 'block';
+        }
+
+        // Show Expense Summary
+        function showExpenseSummary() {
+            const education = parseFloat(document.querySelector('input[name="education"]').value) || 0;
+            const household = parseFloat(document.querySelector('input[name="household"]').value) || 0;
+            const transport = parseFloat(document.querySelector('input[name="transport"]').value) || 0;
+            const health = parseFloat(document.querySelector('input[name="health"]').value) || 0;
+            const subscriptions = parseFloat(document.querySelector('input[name="subscriptions"]').value) || 0;
+
+            // Calculate total expenses
+            totalExpenses = education + household + transport + health + subscriptions;
+
+            // Update the total expenses in the summary
+            document.getElementById('total-expenses').innerText = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById('total-expenses-summary').innerText = `$${totalExpenses.toFixed(2)}`;
+
+            document.getElementById('expenses-page').style.display = 'none';
+            document.getElementById('expense-summary').style.display = 'block';
+        }
+
+        // Show Saving Goals Form
+        function showSavingGoalsForm() {
+            document.getElementById('expense-summary').style.display = 'none';
+            document.getElementById('saving-goals-page').style.display = 'block';
+        }
+
+        // Show Financial Goal Form
+        function showFinancialGoalPage() {
+            document.getElementById('saving-goals-page').style.display = 'none';
+            document.getElementById('financial-goal-page').style.display = 'block';
+        }
+
+        // Show Budget Management Form
+        function showBudgetManagementPage() {
+            document.getElementById('financial-goal-page').style.display = 'none';
+            document.getElementById('budget-management-page').style.display = 'block';
+        }
+
+        // Show Summary Page
+        function showSummaryPage() {
+            document.getElementById('budget-management-page').style.display = 'none';
+            document.getElementById('summary-page').style.display = 'block';
+            createChart();
+            updateSummary();
+        }
+
+        // Show Help Page
+        function showHelpPage() {
+            document.getElementById('summary-page').style.display = 'none';
+            document.getElementById('help-page').style.display = 'block';
+        }
+
+        // Chart.js graph
+        function createChart() {
+            const categories = ['Education', 'Household', 'Transport', 'Health', 'Subscriptions'];
+            const expenses = [
+                parseFloat(document.querySelector('input[name="education"]').value) || 0,
+                parseFloat(document.querySelector('input[name="household"]').value) || 0,
+                parseFloat(document.querySelector('input[name="transport"]').value) || 0,
+                parseFloat(document.querySelector('input[name="health"]').value) || 0,
+                parseFloat(document.querySelector('input[name="subscriptions"]').value) || 0
+            ];
+
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const expenseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: 'Expenses',
+                        data: expenses,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update summary values
+        function updateSummary() {
+            const totalIncome = 5000; // Example total income
+            const remainingBalance = totalIncome - totalExpenses;
+
+            document.getElementById('total-income').innerText = `$${totalIncome.toFixed(2)}`;
+            document.getElementById('remaining-balance').innerText = `$${remainingBalance.toFixed(2)}`;
+            document.getElementById('total-expenses-summary').innerText = `$${totalExpenses.toFixed(2)}`;
+        }
+
+        // Navigation functions
+        function goBack() {
+            window.history.back(); // Goes back to the previous page
+        }
+
+        function goNext() {
+            window.history.forward(); // Goes to the next page
+        }
+    </script>
+
+</body>
+</html>
